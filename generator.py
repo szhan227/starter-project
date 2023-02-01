@@ -1,7 +1,7 @@
 """
 Created on 2023-01-23
 By Siyang Zhang
-Edited on 2023-01-25
+Edited on 2023-02-01
 """
 import numpy as np
 import matplotlib
@@ -23,13 +23,13 @@ def generate_dataset(num=1000, save=False):
     labels = []
 
     for i, _ in enumerate(range(num)):
-        inputs.append(generate_ball())
-        inputs.append(generate_cube())
-        inputs.append(generate_cylinder())
-        inputs.append(generate_cone())
-        inputs.append(generate_pyramid())
-        inputs.append(generate_ring())
-        inputs.append(generate_torus())
+        inputs.append(rotate3D(generate_ball()))
+        inputs.append(rotate3D(generate_cube()))
+        inputs.append(rotate3D(generate_cylinder()))
+        inputs.append(rotate3D(generate_cone()))
+        inputs.append(rotate3D(generate_pyramid()))
+        inputs.append(rotate3D(generate_ring()))
+        inputs.append(rotate3D(generate_torus()))
         labels.extend([0, 1, 2, 3, 4, 5, 6])
         print('\rGenerating data: {}/{}'.format(i + 1, num), end='')
     print()
@@ -46,6 +46,33 @@ def generate_dataset(num=1000, save=False):
             pickle.dump(data, f)
     return inputs, labels
 
+
+def rotation_matrix(axis, theta):
+    """
+    Return the rotation matrix associated with counterclockwise rotation about
+    the given axis by theta radians.
+    """
+    axis = np.asarray(axis)
+    axis = axis / np.sqrt(np.dot(axis, axis))
+    a = np.cos(theta / 2.0)
+    b, c, d = -axis * np.sin(theta / 2.0)
+    aa, bb, cc, dd = a * a, b * b, c * c, d * d
+    bc, ad, ac, ab, bd, cd = b * c, a * d, a * c, a * b, b * d, c * d
+    return np.array([[aa + bb - cc - dd, 2 * (bc + ad), 2 * (bd - ac)],
+                     [2 * (bc - ad), aa + cc - bb - dd, 2 * (cd + ab)],
+                     [2 * (bd + ac), 2 * (cd - ab), aa + dd - bb - cc]])
+
+
+def rotate3D(obj3d):
+
+    x = obj3d[:, 0]
+    y = obj3d[:, 1]
+    z = obj3d[:, 2]
+
+    axis = np.random.randint(5, size=3)
+    theta = np.random.uniform(0, 2 * np.pi)
+    x1, y1, z1 = np.dot(rotation_matrix(axis, theta), np.stack((x, y, z), axis=0))
+    return np.stack((x1, y1, z1), axis=1)
 
 def generate_ball():
     """
@@ -98,7 +125,7 @@ def generate_cylinder():
 
 def generate_cone():
     result = []
-    r = np.random.uniform(0.1, 0.5)
+    r = np.random.uniform(0.1, 5.0)
     h = np.random.uniform(0.1, 5.0)
 
     for _ in range(NUM_SAMPLES):
@@ -116,7 +143,7 @@ def generate_cone():
 
 def generate_pyramid():
     result = []
-    a = np.random.uniform(0.1, 0.5)
+    a = np.random.uniform(0.1, 5.0)
     h = np.random.uniform(0.1, 5.0)
 
     for _ in range(NUM_SAMPLES):

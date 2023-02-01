@@ -24,7 +24,9 @@ I trained the model for 20 epochs and it finally reached over 0.95 accuracy on a
 
 I believe the biggest challenge in this project is the t-net part. The paper suggest that mlp is used in input and feature transform as feature extractor, but it turn out that 1D convolution perform better. Also, the problem is 3D shape classification, and it is very intuitive to think about 3D convolution(which requires huge computational power). The point cloud structure is very straightforward and friendly to sensor. Also, since we do not need an order of points, we can simply treat them as 1D array, and after some transformation, introduce a symmetric function to make the array unordered. Thus, 1D convolution made its sense.
 
-I will continue working on data augmentation(such as rotation and shifting of data) and try to introduce intentionally flawed data(such as outliers and missing data, as the paper suggest that robustness of the model). 
+I will continue working on data augmentation(such as shifting of data) and try to introduce intentionally flawed data(such as outliers and missing data, as the paper suggest that robustness of the model). 
+
+I also noticed that the PointNet seems to vulnerable to rotation. I tried to add some random 3D rotations of object, and the performance drops quickly.
 
 Also, as the project requires me to create my own database, I just write code to generate point clouds of some basic 3D shape. In the future, I may test the model on some online available dataset such as ModelNet10 and ModelNet40 if possible.
 
