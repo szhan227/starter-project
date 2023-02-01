@@ -21,17 +21,16 @@ NUM_SAMPLES = 2048
 def generate_dataset(num=1000, save=False):
     inputs = []
     labels = []
-    lb = [0, 1, 2, 3, 4]
+
     for i, _ in enumerate(range(num)):
         inputs.append(generate_ball())
-        # inputs.append(generate_cube())
+        inputs.append(generate_cube())
         inputs.append(generate_cylinder())
         inputs.append(generate_cone())
-        # inputs.append(generate_pyramid())
+        inputs.append(generate_pyramid())
         inputs.append(generate_ring())
         inputs.append(generate_torus())
-        # labels.extend([0, 1, 2, 3, 4, 5, 6])
-        labels.extend([0, 1, 2, 3, 4])
+        labels.extend([0, 1, 2, 3, 4, 5, 6])
         print('\rGenerating data: {}/{}'.format(i + 1, num), end='')
     print()
 
